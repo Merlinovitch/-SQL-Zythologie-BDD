@@ -1,15 +1,20 @@
 # Zythologue-AME
+## Merise
 
-## initialiser le docker
+![merise](merise.png)
+
+## Initialiser le docker:
 ouvrir un terminal
 ```
 cd postgres-docker
 docker-compose up --build
 ```
 
-se rendre ensuite sur http://localhost:5050/browser/
+se rendre ensuite sur http://localhost:5050/browser/ .
 se rendre dans le query tool comme sur la capture ci jointe :
 ![Query tool](pgAdmin-4.png)
+
+## Requètes SQL
 
 Entrer les requetes ci dessous :
 
