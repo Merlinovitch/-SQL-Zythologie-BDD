@@ -106,4 +106,47 @@ DELETE FROM photo
 WHERE beer_id = 1;
 ```
 
+Ecrire une procédure stockée pour permettre à un utilisateur de noter une bière. Si l'utilisateur a déjà noté cette bière, la note est mise à jour ; sinon, une nouvelle note est ajoutée.
+```
+CREATE OR REPLACE PROCEDURE note_biere(
+    IN p_beer_id INT,
+    IN p_beerlover_id INT,
+    IN p_note INT,
+    IN p_review_comment VARCHAR(500)
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Vérifier si l'utilisateur a déjà noté cette bière
+    IF EXISTS (SELECT 1 FROM review WHERE beer_id = p_beer_id AND beerlover_id = p_beerlover_id) THEN
+        -- Mettre à jour la note existante
+        UPDATE review
+        SET review_note = p_note,
+            review_comment = p_review_comment
+        WHERE beer_id = p_beer_id AND beerlover_id = p_beerlover_id;
+    ELSE
+        -- Ajouter une nouvelle note
+        INSERT INTO review (review_note, beer_id, beerlover_id, review_comment)
+        VALUES (p_note, p_beer_id, p_beerlover_id, p_review_comment);
+    END IF;
+END;
+$$;
+```
 
+Ecrire un déclencheur qui permet de détecter si l'ABV (taux d'alcool) est bien compris entre 0 et 20 avant l'ajout de chaque bière
+```
+CREATE OR REPLACE FUNCTION check_abv_range()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.beer_abv < 0 OR NEW.beer_abv > 20 THEN
+        RAISE EXCEPTION 'Le taux d''alcool (ABV) doit être compris entre 0 et 20.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER abv_range_trigger
+BEFORE INSERT ON beer
+FOR EACH ROW
+EXECUTE FUNCTION check_abv_range();
+```
