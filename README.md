@@ -1,5 +1,18 @@
 # Zythologue-AME
 
+## initialiser le docker
+ouvrir un terminal
+```
+cd postgres-docker
+docker-compose up --build
+```
+
+se rendre ensuite sur http://localhost:5050/browser/
+se rendre dans le query tool comme sur la capture ci jointe :
+![Query tool](pgAdmin-4.png)
+
+Entrer les requetes ci dessous :
+
 Lister les bières par taux d'alcool, de la plus légère à la plus forte.
 
 ```
