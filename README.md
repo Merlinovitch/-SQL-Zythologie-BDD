@@ -2,6 +2,7 @@
 ## Merise
 
 ![merise](merise.png)
+(Le lien excalidraw est disponible dans le repo)
 
 ## Initialiser le docker:
 ouvrir un terminal
